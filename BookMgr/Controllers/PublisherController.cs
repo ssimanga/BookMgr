@@ -8,37 +8,45 @@ namespace BookMgr.Controllers
     public class PublisherController : Controller
     {
         private readonly ApplicationDbContext _context;
+
         public PublisherController(ApplicationDbContext context)
         {
             _context = context;
         }
+
+        // READ: List all publishers
         public async Task<IActionResult> Index()
         {
             var publishers = await _context.Publishers.ToListAsync();
             return View(publishers);
         }
-        //View details of a specific author
+
+        // READ: View details of a specific publisher
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
+
             var publisher = await _context.Publishers
-                                .Include(a => a.Books)
-                                .FirstOrDefaultAsync(m => m.Id == id);
+                                          .Include(p => p.Books)
+                                          .FirstOrDefaultAsync(m => m.Id == id);
             if (publisher == null)
             {
                 return NotFound();
             }
+
             return View(publisher);
         }
-        //show the form to create a new author
+
+        // CREATE: Show form to create a new publisher
         public IActionResult Create()
         {
             return View();
         }
-        //Save the author to the database
+
+        // CREATE: Save the new publisher to the database
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Publisher publisher)
@@ -46,18 +54,20 @@ namespace BookMgr.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(publisher);
-               await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(publisher);
         }
-        //show form to edit an existing publisher
+
+        // UPDATE: Show form to edit an existing publisher
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
+
             var publisher = await _context.Publishers.FindAsync(id);
             if (publisher == null)
             {
@@ -65,7 +75,8 @@ namespace BookMgr.Controllers
             }
             return View(publisher);
         }
-        //save the edited publisher to the database
+
+        // UPDATE: Save the edited publisher to the database
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Publisher publisher)
@@ -74,6 +85,7 @@ namespace BookMgr.Controllers
             {
                 return NotFound();
             }
+
             if (ModelState.IsValid)
             {
                 try
@@ -97,24 +109,28 @@ namespace BookMgr.Controllers
             return View(publisher);
         }
 
-        //show confrimation page to delete an author
+        // DELETE: Show confirmation page to delete a publisher
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var publisher = await _context.Publishers.FirstOrDefaultAsync(m => m.Id == id);
+
+            var publisher = await _context.Publishers
+                                          .FirstOrDefaultAsync(m => m.Id == id);
             if (publisher == null)
             {
                 return NotFound();
             }
+
             return View(publisher);
         }
 
-        [HttpPost]
+        // DELETE: Confirm deletion and remove the publisher from the database
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var publisher = await _context.Publishers.FindAsync(id);
             if (publisher != null)
@@ -122,6 +138,7 @@ namespace BookMgr.Controllers
                 _context.Publishers.Remove(publisher);
                 await _context.SaveChangesAsync();
             }
+
             return RedirectToAction(nameof(Index));
         }
 

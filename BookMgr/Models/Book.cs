@@ -8,12 +8,12 @@ namespace BookMgr.Models
     {
         public int Id { get; set; }
         [Required]
-        public string Title { get; set; }
+        public string ?Title { get; set; }
         [Required]
-        public string ISBN { get; set; }
+        public string ?ISBN { get; set; }
         public DateTime PublicationDate { get; set; }
         public int PublisherId { get; set; }
-        public Publisher Publisher { get; set; }
-        public ICollection<BookAuthor> BookAuthors { get; set; }
+        public Publisher ?Publisher { get; set; }
+        public ICollection<BookAuthor> ?BookAuthors { get; set; }
     }
 }
