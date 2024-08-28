@@ -1,4 +1,4 @@
-﻿@model BookMgr.Models.Book
+﻿@model BookMgr.Models.BookViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -30,13 +30,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="PublisherId" class="control-label">Select Publisher</label>
-                <select asp-for="PublisherId" class="form-control" asp-items="ViewBag.PublisherId"></select>
+                <select asp-for="PublisherId" class="form-control" asp-items="Model.Publishers"></select>
                 <span asp-validation-for="PublisherId" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="BookAuthors" class="control-label">Select Authors</label>
-                <select asp-for="BookAuthors" class="form-control" multiple asp-items="ViewBag.Authors"></select>
+                <label asp-for="AuthorIds" class="control-label">Select Authors</label>
+                <select asp-for="AuthorIds" class="form-control" multiple asp-items="Model.Authors"></select>
             </div>
             <div class="form-group mt-2">
                 <input type="submit" value="Create" class="btn btn-primary" />
